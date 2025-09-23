@@ -1,13 +1,14 @@
 const http = require('http');
-const { getTasks } = require('./controller');
+const { getTasks, postTask } = require('./controller');
 
 const server = http.createServer((req, res)=>{
     if(req.method === 'GET'){
         getTasks(req,res);
     }
-    // else if(req.method === 'POST'){
-    //     postTask(req, res);
-    // } else if(req.method === 'DELETE' || req.method === 'PUT'){
+     else if(req.method === 'POST'){
+         postTask(req, res);
+     }
+     //else if(req.method === 'DELETE' || req.method === 'PUT'){
     //     const id = req.url.split('/')[2];
     //     req.method === 'DELETE' ? deleteTask(req, res, id) : markTask((req, res, id));
     // }else {

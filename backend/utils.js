@@ -13,10 +13,10 @@ async function readData() {
     }
 }
 
-  async function writeData(filePath, data) {
+  async function writeData(data) {
     try {
       const json = JSON.stringify(data); 
-      await fs.writeFile(filePath, json, 'utf8');
+      await fs.writeFile(DATA_FILE, json, 'utf8');
     } catch (err) {
       console.error('Error writing file:', err);
     }
