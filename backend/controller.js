@@ -61,9 +61,35 @@ async function deleteTask(req, res, id) {
     }
 }
 
-async function markTask(req, res, id) {
+async function updateTask(req, res, id) {
     try {
-        const updatedTask = await Task.markAsDone(id);
+        const body = await getPostData(req);
+        let updateData;
+        try {
+            updateData = JSON.parse(body);
+        } catch (parseError) {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Invalid JSON' }));
+            return;
+        }
+        if (!updateData || typeof updateData !== 'object' || Object.keys(updateData).length === 0) {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Update data is required' }));
+            return;
+        }
+        if (updateData.title !== undefined) {
+            if (typeof updateData.title !== 'string' || updateData.title.trim().length === 0) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: 'Title must be a non-empty string' }));
+                return;
+            }
+        }
+        if (updateData.done !== undefined && typeof updateData.done !== 'boolean') {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Done field must be a boolean' }));
+            return;
+        }
+        const updatedTask = await Task.updateById(id, updateData);
         if (!updatedTask) {
             res.writeHead(404, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ error: 'Task not found' }));
@@ -82,5 +108,5 @@ module.exports = {
     getTasks,
     postTask,
     deleteTask,
-    markTask
+    updateTask
 };

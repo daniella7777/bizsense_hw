@@ -29,22 +29,27 @@ async function deleteById(id) {
     return deletedTask;
 }
 
-async function markAsDone(id) {
+async function updateById(id, updateData) {
     const tasks = await readData();
     const task = tasks.find(task => task.id === id);
     if (!task) {
-        console.log('markAsDone - Task not found');
+        console.log('updateById - Task not found');
         return null; 
+    } 
+    if (updateData.title !== undefined) {
+        task.title = updateData.title.trim();
     }
-    console.log('markAsDone - Found task:', task);
-    task.done = true;
+    if (updateData.done !== undefined) {
+        task.done = updateData.done;
+    }  
     await writeData(tasks);
+    console.log('updateById - Updated task:', task);
     return task;
 }
 
 module.exports = {
     findAll,
     createTask,
-    markAsDone,
+    updateById,
     deleteById
 }
