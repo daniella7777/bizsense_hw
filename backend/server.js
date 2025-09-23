@@ -1,5 +1,5 @@
 const http = require('http');
-const { getTasks, postTask } = require('./controller');
+const { getTasks, postTask, deleteTask, markTask } = require('./controller');
 
 const server = http.createServer((req, res)=>{
     if(req.method === 'GET'){
@@ -8,13 +8,18 @@ const server = http.createServer((req, res)=>{
      else if(req.method === 'POST'){
          postTask(req, res);
      }
-     //else if(req.method === 'DELETE' || req.method === 'PUT'){
-    //     const id = req.url.split('/')[2];
-    //     req.method === 'DELETE' ? deleteTask(req, res, id) : markTask((req, res, id));
-    // }else {
-    //     res.writeHead(404, { 'Content-Type': 'application/json' });
-    //     res.end(JSON.stringify({ message: 'Route not found' }));
-    //   }
+     else if(req.method === 'DELETE' || req.method === 'PUT'){
+         const id = req.url.split('/')[1];
+         if (!id) {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'ID is required' }));
+            return;
+        }
+         req.method === 'DELETE' ? deleteTask(req, res, id) : markTask(req, res, id);
+     }else {
+         res.writeHead(404, { 'Content-Type': 'application/json' });
+         res.end(JSON.stringify({ message: 'Route not found' }));
+       }
 });
 
 server.listen(8080, '127.0.0.1', () => {
