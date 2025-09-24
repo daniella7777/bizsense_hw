@@ -9,16 +9,12 @@
 <body>
     <h1>Task Manager</h1>
     
-    <form id="addTaskForm" novalidate>
-        <input 
-            type="text" 
-            id="taskTitle" 
-            placeholder="Enter task title" 
-            required 
-            minlength="1"
-            autocomplete="off"
-        >
-        <button type="submit" disabled>Add Task</button>
+    <form id="addTaskForm">
+        <div class="form-row">
+            <input type="text" id="taskTitle" placeholder="Enter task title" required>
+            <button type="submit">Add Task</button>
+        </div>
+        <div class="error-message" id="errorMessage"></div>
     </form>
     
     <ol id="taskList">

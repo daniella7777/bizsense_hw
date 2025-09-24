@@ -3,6 +3,49 @@ import { getAllTasks, createTask, deleteTask, updateTask } from './api.js';
 const taskList = document.getElementById('taskList');
 const addTaskForm = document.getElementById('addTaskForm');
 const taskTitleInput = document.getElementById('taskTitle');
+const errorMessage = document.getElementById('errorMessage');
+
+function validateTitle(title) {
+    const errors = [];
+    
+    if (title.length > 50) {
+        errors.push('Title cannot exceed 50 characters');
+    }
+    
+    if (/[0-9]/.test(title)) {
+        errors.push('Title cannot contain numbers');
+    }
+    
+    if (/[^a-zA-Z\s]/.test(title)) {
+        errors.push('Title cannot contain special characters');
+    }
+    
+    return errors;
+}
+
+function showError(message) {
+    errorMessage.textContent = message;
+    taskTitleInput.classList.add('error');
+}
+
+function clearError() {
+    errorMessage.textContent = '';
+    taskTitleInput.classList.remove('error');
+}
+
+taskTitleInput.addEventListener('input', () => {
+    const title = taskTitleInput.value.trim();
+    if (title) {
+        const errors = validateTitle(title);
+        if (errors.length > 0) {
+            showError(errors[0]);
+        } else {
+            clearError();
+        }
+    } else {
+        clearError();
+    }
+});
 
 async function renderTasks() {
     try {
@@ -64,6 +107,12 @@ async function renderTasks() {
                 } else {
                     const newTitle = titleInput.value.trim();
                     if (newTitle && newTitle !== task.title) {
+                        const errors = validateTitle(newTitle);
+                        if (errors.length > 0) {
+                            alert(errors[0]);
+                            return;
+                        }
+                        
                         editBtn.classList.add('loading');
                         try {
                             await updateTask(task.id, { title: newTitle });
@@ -130,6 +179,12 @@ addTaskForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const title = taskTitleInput.value.trim();
     if (title) {
+        const errors = validateTitle(title);
+        if (errors.length > 0) {
+            showError(errors[0]);
+            return;
+        }
+        
         const submitBtn = addTaskForm.querySelector('button[type="submit"]');
         submitBtn.classList.add('loading');
         submitBtn.textContent = 'Adding...';
@@ -137,6 +192,7 @@ addTaskForm.addEventListener('submit', async (e) => {
         try {
             await createTask(title);
             taskTitleInput.value = '';
+            clearError();
             renderTasks();
         } catch (error) {
             console.error('Error creating task:', error);
