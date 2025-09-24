@@ -51,12 +51,10 @@ async function renderTasks() {
     try {
         taskList.innerHTML = ''; 
         const tasks = await getAllTasks();
-        
-        // Sort tasks: completed tasks first, then incomplete tasks
         const sortedTasks = tasks.sort((a, b) => {
-            if (a.done && !b.done) return -1; // a is done, b is not - a comes first
-            if (!a.done && b.done) return 1;  // b is done, a is not - b comes first
-            return 0; // both are the same status, maintain original order
+            if (a.done && !b.done) return -1; 
+            if (!a.done && b.done) return 1;  
+            return 0; 
         });
         
         sortedTasks.forEach(task => {
