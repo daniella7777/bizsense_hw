@@ -2,6 +2,13 @@ const http = require('http');
 const { getTasks, postTask, deleteTask, updateTask } = require('./controller');
 
 const server = http.createServer((req, res)=>{
+    res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:3000');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    if (req.method === 'OPTIONS') {
+        res.writeHead(204);
+        return res.end();
+      }
     if(req.method === 'GET'){
         getTasks(req,res);
     }
