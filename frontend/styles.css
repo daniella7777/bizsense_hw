@@ -1,0 +1,269 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f5f5;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+/* Main container */
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+    font-weight: 300;
+}
+
+/* Form styling */
+#addTaskForm {
+    max-width: 500px;
+    margin: 0 auto 30px;
+    display: flex;
+    gap: 10px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#taskTitle {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid #e1e8ed;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#taskTitle:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+/* Button styling */
+button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+button[type="submit"] {
+    background-color: #3498db;
+    color: white;
+    min-width: 100px;
+}
+
+button[type="submit"]:hover {
+    background-color: #2980b9;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+button[type="submit"]:active {
+    transform: translateY(0);
+}
+
+/* Task list styling */
+#taskList {
+    max-width: 600px;
+    margin: 0 auto;
+    list-style: none;
+    counter-reset: task-counter;
+}
+
+#taskList li {
+    background: white;
+    margin-bottom: 12px;
+    padding: 16px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+    counter-increment: task-counter;
+    position: relative;
+}
+
+#taskList li:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+#taskList li::before {
+    content: counter(task-counter);
+    background-color: #3498db;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+/* Checkbox styling */
+input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #27ae60;
+    margin-left: 8px;
+}
+
+/* Task title container */
+.task-title-container {
+    flex: 1;
+    margin: 0 12px;
+}
+
+.task-title-container span {
+    font-size: 16px;
+    color: #2c3e50;
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.task-title-container input[type="text"] {
+    width: 100%;
+    padding: 8px 12px;
+    border: 2px solid #3498db;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: #f8f9fa;
+}
+
+.task-title-container input[type="text"]:focus {
+    outline: none;
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+/* Task buttons */
+.task-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.edit-btn {
+    background-color: #f39c12;
+    color: white;
+    padding: 8px 16px;
+    font-size: 12px;
+}
+
+.edit-btn:hover {
+    background-color: #e67e22;
+}
+
+.edit-btn.save-mode {
+    background-color: #27ae60;
+}
+
+.edit-btn.save-mode:hover {
+    background-color: #229954;
+}
+
+.delete-btn {
+    background-color: #e74c3c;
+    color: white;
+    padding: 8px 16px;
+    font-size: 12px;
+}
+
+.delete-btn:hover {
+    background-color: #c0392b;
+}
+
+/* Completed task styling */
+.task-completed {
+    opacity: 0.6;
+}
+
+.task-completed::before {
+    background-color: #27ae60 !important;
+}
+
+/* Loading state */
+.loading {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.task-item-enter {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+}
+
+.task-item-exit {
+    animation: fadeOut 0.3s ease-in;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+    
+    #addTaskForm {
+        flex-direction: column;
+        padding: 15px;
+    }
+    
+    #taskList li {
+        padding: 12px 16px;
+        flex-wrap: wrap;
+    }
+    
+    .task-buttons {
+        margin-top: 8px;
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
