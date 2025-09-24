@@ -33,7 +33,6 @@ async function updateById(id, updateData) {
     const tasks = await readData();
     const task = tasks.find(task => task.id === id);
     if (!task) {
-        console.log('updateById - Task not found');
         return null; 
     } 
     if (updateData.title !== undefined) {
@@ -43,7 +42,6 @@ async function updateById(id, updateData) {
         task.done = updateData.done;
     }  
     await writeData(tasks);
-    console.log('updateById - Updated task:', task);
     return task;
 }
 

@@ -7,7 +7,7 @@ async function getTasks(req, res) {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(tasks));
     } catch (error) {
-        console.log('Error getting tasks', error);
+        console.error('Error getting tasks', error);
         res.writeHead(500, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: 'Internal server error' }));
     }
