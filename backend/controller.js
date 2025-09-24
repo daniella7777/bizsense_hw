@@ -7,10 +7,27 @@ async function getTasks(req, res) {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(tasks));
     } catch (error) {
-        console.log(error);
+        console.log('Error getting tasks', error);
         res.writeHead(500, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: 'Internal server error' }));
     }
+}
+
+function validateId(id, res) {
+    if (!id) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'ID is required' }));
+        return false;
+    }
+    // Check if ID is a valid UUID v4 format
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    
+    if (!uuidRegex.test(id)) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Invalid ID format - must be a valid UUID' }));
+        return false;
+    }
+    return true; 
 }
 
 async function postTask(req, res) {
@@ -29,9 +46,16 @@ async function postTask(req, res) {
             res.end(JSON.stringify({ error: 'Task data is required' }));
             return;
         }
-        if (!taskData.title || typeof taskData.title !== 'string' || taskData.title.trim().length === 0) {
+        if (!taskData.title || typeof taskData.title !== 'string') {
             res.writeHead(400, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ error: 'Title is required and must be a non empty string' }));
+            return;
+        }
+        const title = taskData.title.trim();
+        const maxLength = 50;
+        if (title.length === 0 || title.length > maxLength ||!/^[a-zA-Z\s]+$/.test(title)) {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: `Title must be a non empty string with only english letters with 1-${maxLength} characters` }));
             return;
         }
         const newTask = await Task.createTask(taskData);
@@ -108,5 +132,6 @@ module.exports = {
     getTasks,
     postTask,
     deleteTask,
-    updateTask
+    updateTask,
+    validateId
 };

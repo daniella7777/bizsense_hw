@@ -1,5 +1,5 @@
 const http = require('http');
-const { getTasks, postTask, deleteTask, updateTask } = require('./controller');
+const { getTasks, postTask, deleteTask, updateTask, validateId } = require('./controller');
 
 const server = http.createServer((req, res)=>{
     res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:3000');
@@ -17,9 +17,7 @@ const server = http.createServer((req, res)=>{
      }
      else if(req.method === 'DELETE' || req.method === 'PUT'){
          const id = req.url.split('/')[1];
-         if (!id) {
-            res.writeHead(400, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'ID is required' }));
+         if (!validateId(id, res)) {
             return;
         }
          req.method === 'DELETE' ? deleteTask(req, res, id) : updateTask(req, res, id);
